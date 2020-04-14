@@ -56,20 +56,20 @@ namespace End
             }
             */
 
-            string connstr = "server=.;uid=sa;pwd=mao204264;database=SuperShop";
-            SqlConnection conn = new SqlConnection(connstr);
+            //向数据库Test中的Employee表
+            //添加数据
+            string MySql = "server=.;uid=sa;pwd=mao204264;database=Test";
+            SqlConnection MySqlCon = new SqlConnection(MySql);
+
+            string insert = "insert into Employee values('001','张三','男','1990.1.1')";
             try
             {
-                conn.Open();
-                string sql = "insert into test values('1','test','123456789')";
-                SqlCommand comm = new SqlCommand();
-                comm.CommandText = sql;
-                comm.Connection = conn;
-                //SqlConnection conn = new SqlConnection(sqll,conn);
-                int num = comm.ExecuteNonQuery();
+                MySqlCon.Open();
+                SqlCommand SqlRun = new SqlCommand(insert, MySqlCon);
+                int num = SqlRun.ExecuteNonQuery();
                 if (num > 0)
                 {
-                    Console.WriteLine("OK");
+                    Console.WriteLine("Insert Success!");
                 }
             }
             catch (Exception e)
@@ -78,8 +78,85 @@ namespace End
             }
             finally
             {
-                conn.Close();
+                MySqlCon.Close();
             }
+
+            //修改数据
+            string update = "update Employee set name='李四' where num='001'";
+            try
+            {
+                MySqlCon.Open();
+                SqlCommand SqlRun = new SqlCommand(update, MySqlCon);
+                int num = SqlRun.ExecuteNonQuery();
+                if (num > 0)
+                {
+                    Console.WriteLine("update Success!");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                MySqlCon.Close();
+            }
+
+            //删除数据
+            string delete = "delete from Employee";
+            try
+            {
+                MySqlCon.Open();
+                SqlCommand SqlRun = new SqlCommand(delete, MySqlCon);
+                int num = SqlRun.ExecuteNonQuery();
+                if (num > 0)
+                {
+                    Console.WriteLine("Delete Success!");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                MySqlCon.Close();
+            }
+
+            //从控制台接受用户输入员工号，查询该员工的名字。
+            Console.WriteLine("请输入员工编号：");
+            string uid = Console.ReadLine();
+            string select = string.Format("select name from Employee where num='{0}'", uid);
+            try
+            {
+                MySqlCon.Open();
+                SqlCommand SqlRun = new SqlCommand(select, MySqlCon);
+                int num = SqlRun.ExecuteNonQuery();
+                object name = SqlRun.ExecuteScalar();
+                if (name == null)
+                {
+                    Console.WriteLine("未查到该数据");
+                }
+                else
+                {
+                    Console.WriteLine("员工姓名为：" + name);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                MySqlCon.Close();
+            }
+
+
+
+
+
+
+
         }
         public static void A()
         {
